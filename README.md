@@ -12,19 +12,21 @@
 10. Escolha um pasta local do computador para armazenar os arquivos do repositório clonado.
 11. Ao ser perguntado se deseja abrir o repositório clonado, clique sobre o botão `[Abrir]`.
 
-----
+---
 
 # Configurando o _back-end_
 
 ## Instalação das dependências
 
 Abra um terminal no VS Code. Nele, execute os comandos:
+
 ```
 cd back-end
 npm install
 ```
 
 Caso apareça uma mensagem alertando sobre vulnerabilidades detectadas, execute:
+
 ```
 npm audit fix
 ```
@@ -32,6 +34,7 @@ npm audit fix
 ## Criação do banco de dados
 
 Ainda no terminal, execute:
+
 ```
 npx prisma generate
 npx prisma migrate dev --name create-tables
@@ -40,6 +43,7 @@ npx prisma migrate dev --name create-tables
 ### Configuração das variáveis de ambiente
 
 Renomeie o arquivo `.env.example` para `.env`. Ajuste o conteúdo do arquivo para o seguinte:
+
 ```ini
 # Renomeie este arquivo para .env e preencha os valores abaixo
 
@@ -57,23 +61,26 @@ ALLOWED_ORIGINS="http://localhost:5173,http://127.0.0.1:5173"
 ## Executando o projeto
 
 Estando dentro da pasta `back-end`, execute:
+
 ```
 npm run dev
 ```
 
-----
+---
 
 # Configurando o _front-end_
 
 ## Instalação das dependências
 
 Abra um segundo terminal no VS Code. Nele, execute os comandos:
+
 ```
 cd front-end
 npm install
 ```
 
 Caso apareça uma mensagem alertando sobre vulnerabilidades detectadas, execute:
+
 ```
 npm audit fix
 ```
@@ -81,6 +88,7 @@ npm audit fix
 ### Configuração das variáveis de ambiente
 
 Renomeie o arquivo `.env.local.example` para `.env.local`. Ajuste o conteúdo do arquivo para o seguinte:
+
 ```ini
 # Renomeie este arquivo para .env.local e preencha os valores abaixo
 
@@ -95,6 +103,7 @@ VITE_AUTH_TOKEN_NAME="_auth"
 ## Executando o projeto
 
 Estando dentro da pasta `front-end`, execute:
+
 ```
 npm run dev
 ```
