@@ -10,7 +10,7 @@ const app = express()
 
 app.use(cors({
   origin: process.env.ALLOWED_ORIGINS.split(','),
-  // credentials: true
+  credentials: true
 }))
 
 app.use(logger('dev'))
