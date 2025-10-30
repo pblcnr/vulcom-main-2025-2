@@ -16,6 +16,8 @@ import CarForm from "../pages/car/CarForm";
 import UserList from "../pages/user/UserList";
 import UserForm from "../pages/user/UserForm";
 
+import BruteForce from "../pages/BruteForce";
+
 /*
  Os níveis de acesso foram definidos como segue:
  0 ~> qualquer usuário (incluindo quando não há usuário autenticado)
@@ -101,6 +103,13 @@ const routes = [
     element: <UserForm />,
     userLevel: UserLevel.ADMIN,
     omitFromMainMenu: true,
+  },
+  {
+    route: "/brute-force",
+    description: "Ataque de força bruta",
+    element: <BruteForce />,
+    userLevel: UserLevel.ADMIN,
+    divider: true,
   },
 ];
 
