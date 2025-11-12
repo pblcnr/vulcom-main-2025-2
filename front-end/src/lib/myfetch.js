@@ -12,6 +12,7 @@ class HttpError extends Error {
     super(message)
     this.name = 'HttpError'
     this.status = Number(status)
+    this.details = null
   }
 }
 
@@ -23,23 +24,23 @@ const baseUrl = import.meta.env.VITE_API_BASE
 function getOptions(body = null, method = 'GET') {
   const options = {
     method,
-    headers: {"Content-type": "application/json; charset=UTF-8"},
+    headers: { "Content-type": "application/json; charset=UTF-8" },
     credentials: 'include'  // Instrui o back-end a gravar cookies no front
   }
 
-  if(body) options.body = JSON.stringify(body)
+  if (body) options.body = JSON.stringify(body)
 
   // Verifica se existe um token gravado no localStorage e o inclui
   // nos headers, nesse caso
   const token = window.localStorage.getItem(import.meta.env.VITE_AUTH_TOKEN_NAME)
 
-  if(token) options.headers.authorization = `Bearer ${token}`
+  if (token) options.headers.authorization = `Bearer ${token}`
 
   return options
 }
 
 function getErrorDescription(response) {
-  switch(response.status) {
+  switch (response.status) {
     case 401:   // Unauthorized
       return 'ERRO: usuário ou senha incorretos'
 
@@ -55,30 +56,42 @@ function getErrorDescription(response) {
   }
 }
 
-function processResponse(response) {
-  if(response.ok) {
+async function processResponse(response) {
+  if (response.ok) {
     const isJson = response.headers.get('content-type')?.includes('application/json')
-    if(isJson) return response.json()
+    if (isJson) return response.json()
     else return true
-  } else throw new HttpError(response.status, getErrorDescription(response))
-}
+  }
 
-myfetch.post = async function(path, body) {
+  // Tenta obter JSON com detalhes do erro
+  let details = null
+  try {
+    const isJson = response.headers.get('content-type')?.includes('application/json')
+    if (isJson) details = await response.json()
+  } catch (__) {
+    details = null
+  }
+
+  const err = new HttpError(response.status, getErrorDescription(response))
+  err.details = details
+  throw err
+}
+myfetch.post = async function (path, body) {
   const response = await fetch(baseUrl + path, getOptions(body, 'POST'))
   return processResponse(response)
 }
 
-myfetch.put = async function(path, body) {
+myfetch.put = async function (path, body) {
   const response = await fetch(baseUrl + path, getOptions(body, 'PUT'))
   return processResponse(response)
 }
 
-myfetch.get = async function(path) {
+myfetch.get = async function (path) {
   const response = await fetch(baseUrl + path, getOptions())
   return processResponse(response)
 }
 
-myfetch.delete = async function(path) {
+myfetch.delete = async function (path) {
   const response = await fetch(baseUrl + path, getOptions(null, 'DELETE'))
   return processResponse(response)
 }

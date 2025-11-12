@@ -1,4 +1,6 @@
 import prisma from '../database/client.js'
+import { parseCarPayload } from '../validators/carSchema.js'
+import { ZodError } from 'zod'
 
 const controller = {}     // Objeto vazio
 
@@ -12,7 +14,22 @@ controller.create = async function(req, res) {
     // do usuário autenticado
     req.body.updated_user_id = req.authUser.id
 
-    await prisma.car.create({ data: req.body })
+    // Validação com Zod (converte/normaliza tipos antes)
+    try {
+      const valid = parseCarPayload(req.body)
+      await prisma.car.create({ data: valid })
+    }
+    catch(err) {
+      if(err instanceof ZodError) {
+        const errors = {}
+        for(const e of err.errors) {
+          const path = e.path[0] ?? '_form'
+          errors[path] = e.message
+        }
+        return res.status(400).json({ errors })
+      }
+      throw err
+    }
 
     // HTTP 201: Created
     res.status(201).end()
@@ -84,10 +101,25 @@ controller.retrieveOne = async function(req, res) {
 controller.update = async function(req, res) {
   try {
 
-    const result = await prisma.car.update({
-      where: { id: Number(req.params.id) },
-      data: req.body
-    })
+    // Validação com Zod antes de atualizar
+    try {
+      const valid = parseCarPayload(req.body)
+      var result = await prisma.car.update({
+        where: { id: Number(req.params.id) },
+        data: valid
+      })
+    }
+    catch(err) {
+      if(err instanceof ZodError) {
+        const errors = {}
+        for(const e of err.errors) {
+          const path = e.path[0] ?? '_form'
+          errors[path] = e.message
+        }
+        return res.status(400).json({ errors })
+      }
+      throw err
+    }
 
     // Encontrou e atualizou ~> HTTP 204: No Content
     if(result) res.status(204).end()
