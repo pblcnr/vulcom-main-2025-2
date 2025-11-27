@@ -31,6 +31,11 @@ export default function (req, res, next) {
     }
   }
 
+  /* 
+    Vunerabilidade: API:2023 - Falha de autenticação
+    A vulnerabilidade foi evitada ao exigir a apresentação e validação de um token JWT válido antes de permitir o acesso às rotas protegidas.
+  */
+
   /* PROCESSO DE VERIFICAÇÃO DO TOKEN DE AUTORIZAÇÃO */
   let token
 

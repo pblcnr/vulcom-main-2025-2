@@ -4,6 +4,12 @@ import { ZodError } from 'zod'
 
 const controller = {}     // Objeto vazio
 
+/* 
+  Vulnerabilidade: API6:2023 – Acesso irrestrito a fluxos de negócio sensíveis
+  A vulnerabilidade deveria ser evitada implementando mecanismos de limitação de uso (rate limiting)
+  e verificações adicionais de permissão antes de permitir o cadastro de clientes, evitando abusos e automações maliciosas.
+*/
+
 controller.create = async function (req, res) {
   try {
 

@@ -4,6 +4,11 @@ import bcrypt from 'bcrypt';
 
 const controller = {}     // Objeto vazio
 
+/*
+  Vulnerabilidade: API5:2023 – Falha de autenticação a nível de função
+  A vulnerabilidade foi evitada ao garantir que apenas usuários administradores possam criar, editar ou excluir outros usuários, usando a checagem do campo is_admin do usuário autenticado.
+*/
+
 controller.create = async function (req, res) {
   try {
     // Somente usuários administradores podem acessar este recurso
@@ -84,6 +89,11 @@ controller.retrieveOne = async function (req, res) {
   }
 }
 
+/*
+  Vulnerabilidade: API5:2023 – Falha de autenticação a nível de função
+  A vulnerabilidade foi evitada ao garantir que apenas usuários administradores possam criar, editar ou excluir outros usuários, usando a checagem do campo is_admin do usuário autenticado.
+*/
+
 controller.update = async function (req, res) {
   try {
     // Somente usuários administradores podem acessar este recurso
@@ -116,6 +126,11 @@ controller.update = async function (req, res) {
     res.status(500).end()
   }
 }
+
+/*
+  Vulnerabilidade: API5:2023 – Falha de autenticação a nível de função
+  A vulnerabilidade foi evitada ao garantir que apenas usuários administradores possam criar, editar ou excluir outros usuários, usando a checagem do campo is_admin do usuário autenticado.
+*/
 
 controller.delete = async function (req, res) {
   try {
